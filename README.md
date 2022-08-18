@@ -7,6 +7,7 @@
 ## Compile and install manually on your machine by running
 
 `
+cd CXO
 g++ cxo.c -o cxo
 chmod +x cxo
 sudo mv cxo /usr/bin/cxo
