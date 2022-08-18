@@ -1,9 +1,17 @@
 # CXO
 
-## Compile on your machine by running
+## Install using the auto-install script (Linux only)
 
-`g++ cxo.c -o cxo ; chmod +x cxo`
+'git clone https://github.com/lexofficial29/CXO.git;cd cxo;sudo ./install"`
 
-### and run with
+## Compile and install manually on your machine by running
 
-`./cxo`
+`
+g++ cxo.c -o cxo
+chmod +x cxo
+sudo mv cxo /usr/bin/cxo
+`
+
+### Run program by running
+
+`cxo`

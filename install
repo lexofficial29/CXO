@@ -1,0 +1,1 @@
+echo "Compiling program.. " ; g++ cxo.c -o cxo ; chmod +x cxo ; sudo mv cxo /usr/bin/cxo ; chmod +x /usr/bin/cxo; echo "Install done! Run cxo in terminal to launch the game"
