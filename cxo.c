@@ -4,6 +4,71 @@
 #include <time.h>
 #include <stdlib.h>
 
+int winCheck(int board[3][3]) {
+
+	// Check for straight lines
+
+	int line = -1;
+	for (int i = 0; i < 3; i++) {
+		if (board[i][0] == board[i][1] && board[i][0] == board[i][2] && board[i][0] != -1) {
+			line = board[i][0];
+		}
+	}
+
+	if (line >= 0) {
+		return line;
+	}
+
+	// Check for / or \ pattern
+
+	if (board[0][2] == board[1][1] && board[0][2] == board[3][0]) {
+		if (board[0][2] == 0) {
+			return 2;
+		}
+		else {
+			return 3;
+		}
+	}
+
+	if (board[0][0] == board[1][1] && board[0][0] == board[3][3]) {
+		if (board[0][0] == 0) {
+			return 2;
+		}
+		else {
+			return 3;
+		}
+	}
+
+
+	// Check if there is any space left.
+
+	bool space = false;
+
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < 3; j++) {
+			if (board[i][j] == -1) {
+				space = true;
+			}
+		}
+	}
+	if (space == false) {
+		// Return failure to find free space
+		return 4;
+	}
+
+	return 5;
+
+	// Return codes :
+
+	// 0 - Line for O
+	// 1 - Line for X
+	// 2 - / or \ for O
+	// 3 - / or \ for X
+	// 4 - Board full
+	// 5 - Nothing
+
+}
+
 char returnDisplay(int value) {
 
 	// Return visible characters based on board values.
@@ -105,22 +170,6 @@ void getDec(int board[3][3]) {
 
 int AIPlace(int board[3][3], char mode) {
 
-	// Check if there is any space left.
-
-	bool space = false;
-
-	for (int i = 0; i < 3; i++) {
-		for (int j = 0; j < 3; j++) {
-			if (board[i][j] == -1) {
-				space = true;
-			}
-		}
-	}
-	if (space == false) {
-		// Return failure to find free space
-		return 0;
-	}
-
 	// Random mode
 
 	if (mode == 'r') {
@@ -159,7 +208,33 @@ int main() {
 
 		// Check if there are any valid moves for A.I and if there are draw new board & get Dec from user.
 
-		if(AIPlace(board, 'r')) {
+		int win = winCheck(board);
+		if (win == 0) {
+			// Game ends, line detected (O wins)
+			// system("@cls||clear");
+			printf("Game Ended, you won!\n");
+			break;
+		}
+		else if (win == 1) {
+			// Game ends, line detected (X wins)
+			// system("@cls||clear");
+			printf("Game Ended, you lost\n");
+			break;
+		}
+		else if(win == 2) {
+			// Game ends, horizontal line detected (O wins)
+			// system("@cls||clear");
+			printf("Game Ended, you won!\n");
+			break;
+		}
+		else if(win == 3) {
+			// Game ends, horizontal line detected (X wins)
+			// system("@cls||clear");
+			printf("Game Ended, you lost\n");
+			break;
+		}
+
+		if(AIPlace(board, 'r') && win != 4) {
 			drawboard(board);
 			getDec(board);
 		}
@@ -167,7 +242,7 @@ int main() {
 
 			// Game ends, display end screen and quit loop
 
-			system("@cls||clear");
+			// system("@cls||clear");
 			printf("Game Ended, nobody won lmao\n");
 			break;
 		}
