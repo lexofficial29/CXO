@@ -1,3 +1,5 @@
+// Written by Lex | Tuesday 23 august 2022, 01:17:04 AM
+
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
@@ -6,37 +8,29 @@
 
 int winCheck(int board[3][3]) {
 
-	// Check for straight lines
+	// Check for straight lines | Horizontal & Vertical
 
-	int line = -1;
 	for (int i = 0; i < 3; i++) {
 		if (board[i][0] == board[i][1] && board[i][0] == board[i][2] && board[i][0] != -1) {
-			line = board[i][0];
+			return board[i][0];
 		}
 	}
 
-	if (line >= 0) {
-		return line;
+	for (int i = 0; i < 3; i++) {
+		if (board[0][i] == board[1][i] && board[0][i] == board[2][i] && board[0][i] != -1) {
+				return board[i][0];
+		}
 	}
+
 
 	// Check for / or \ pattern
 
-	if (board[0][2] == board[1][1] && board[0][2] == board[3][0]) {
-		if (board[0][2] == 0) {
-			return 2;
-		}
-		else {
-			return 3;
-		}
+	if (board[2][0] == board[1][1] && board[2][0] == board[0][2] && board[2][0] != -1) {
+		return board[2][0];
 	}
 
-	if (board[0][0] == board[1][1] && board[0][0] == board[3][3]) {
-		if (board[0][0] == 0) {
-			return 2;
-		}
-		else {
-			return 3;
-		}
+	if (board[0][0] == board[1][1] && board[0][0] == board[2][2] && board[0][0] != -1) {
+		return board[0][0];
 	}
 
 
@@ -53,19 +47,17 @@ int winCheck(int board[3][3]) {
 	}
 	if (space == false) {
 		// Return failure to find free space
-		return 4;
+		return 2;
 	}
 
-	return 5;
+	return 3;
 
 	// Return codes :
 
 	// 0 - Line for O
 	// 1 - Line for X
-	// 2 - / or \ for O
-	// 3 - / or \ for X
-	// 4 - Board full
-	// 5 - Nothing
+	// 2 - Board full
+	// 3 - Nothing
 
 }
 
@@ -73,16 +65,14 @@ char returnDisplay(int value) {
 
 	// Return visible characters based on board values.
 
-	if (value == -1) {
-		return '-';
+	switch (value) {
+		case -1:
+			return '-';
+		case 0: 
+			return 'O';
+		case 1:
+			return 'X';
 	}
-	if (value == 0) {
-		return 'O';
-	}
-	if (value == 1) {
-		return 'X';
-	}
-
 
 	// For unknown value return empty space
 
@@ -187,6 +177,38 @@ int AIPlace(int board[3][3], char mode) {
 
 }
 
+int verifyWin(int board[3][3]) {
+
+	int win = winCheck(board);
+	
+	switch (win) {
+		case 0:
+			system("@cls||clear");
+			drawboard(board);
+			printf("\n--> Game Ended, you won!\n");
+			break;
+		case 1:
+			system("@cls||clear");
+			drawboard(board);
+			printf("\n--> Game Ended, you lost\n");
+			break;
+		case 2:
+			system("@cls||clear");
+			drawboard(board);
+			printf("\n--> Game Ended, nobody won lmao!\n");
+			break;
+		case 3:
+			break;
+		default:
+			system("@cls||clear");
+			drawboard(board);
+			printf("\n--> Game Ended, nobody won lmao!\n");
+			break;
+	}
+
+	return win;
+
+}
 
 int main() {
 
@@ -202,54 +224,35 @@ int main() {
 		}
 	}
 
+	// Place initial X somewhere on the board
+
+	AIPlace(board, 'r');
+
 	// Keep player in game loop as long as the game is not finished
 
 	while (game) {
 
-		// Check if there are any valid moves for A.I and if there are draw new board & get Dec from user.
+		// Draw board and get decision from player
 
-		int win = winCheck(board);
-		if (win == 0) {
-			// Game ends, line detected (O wins)
-			// system("@cls||clear");
-			printf("Game Ended, you won!\n");
-			break;
-		}
-		else if (win == 1) {
-			// Game ends, line detected (X wins)
-			// system("@cls||clear");
-			printf("Game Ended, you lost\n");
-			break;
-		}
-		else if(win == 2) {
-			// Game ends, horizontal line detected (O wins)
-			// system("@cls||clear");
-			printf("Game Ended, you won!\n");
-			break;
-		}
-		else if(win == 3) {
-			// Game ends, horizontal line detected (X wins)
-			// system("@cls||clear");
-			printf("Game Ended, you lost\n");
+		drawboard(board);
+		getDec(board);
+
+		// Check if there are any winning moves after player decision
+
+		if (verifyWin(board) != 3) {
+			game = false;
 			break;
 		}
 
-		if(AIPlace(board, 'r') && win != 4) {
-			drawboard(board);
-			getDec(board);
-		}
-		else {
+		if(AIPlace(board, 'r') && game) {
 
-			// Game ends, display end screen and quit loop
+			// Check if there are any winning moves after A.I decision
 
-			// system("@cls||clear");
-			printf("Game Ended, nobody won lmao\n");
-			break;
+			if (verifyWin(board) != 3) {
+				game = false;
+				break;
+			}
+
 		}
 	}
 }
-
-
-// TO DO:
-// + Check if board is full
-// + Check for winning combo
