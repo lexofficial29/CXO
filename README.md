@@ -2,14 +2,7 @@ CXO: A tic tac toe implementation
 
 🛠️ Installation Made Easy (Linux Only)
 
-Get ready to try CXO in just a few simple steps:
-
-    🔗 Clone the GitHub repository: git clone https://github.com/lexofficial29/CXO.git
-    📂 Navigate to the cloned directory: cd CXO
-    🖥️ Compile the program: g++ cxo.c -o cxo
-    🤖 Give it executable permissions: chmod +x cxo
-    🚀 Move the program to your /usr/bin directory: sudo mv cxo /usr/bin/cxo
-    🎉 Voila! CXO is now installed on your machine.
+`git clone https://github.com/lexofficial29/CXO.git;cd CXO;sudo ./install`
 
 💻 Manual Compilation and Installation
 
